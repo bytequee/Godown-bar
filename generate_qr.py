@@ -3,8 +3,8 @@
 Print-ready QR code for the Godown Bar menu link.
 
 Usage:
-    python generate_qr.py https://menu.example.in
-    python generate_qr.py https://menu.example.in --logo Godown.jpeg
+    python generate_qr.py https://lucent-blini-475f77.netlify.app/
+    python generate_qr.py https://lucent-blini-475f77.netlify.app/ --logo Godown.jpeg
 
 Writes into ./output/ :
     menu-qr.svg        vector, for print (scales to any size)
@@ -115,7 +115,7 @@ def verify(path, expected):
 def main():
     if len(sys.argv) < 2:
         print("Usage: python generate_qr.py URL [--logo LOGO_FILE]")
-        print("Example: python generate_qr.py https://menu.example.in --logo Godown.jpeg")
+        print("Example: python generate_qr.py https://lucent-blini-475f77.netlify.app/ --logo Godown.jpeg")
         sys.exit(1)
 
     ap = argparse.ArgumentParser(description="Print-ready QR code for the menu link.")
