@@ -4,9 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#141414">
+<meta name="theme-color" content="#000000">
 <title>Godown Bar — Menu</title>
 <meta name="description" content="The food & drinks menu at Godown Bar. Starters, main course veg &amp; non-veg, biryani &amp; rice, breads, desserts and beverages.">
+<meta name="theme-color" content="#000000">
 
 <!-- Favicon = the restaurant logo -->
 <link rel="icon" type="image/jpeg" href="Godown.jpeg">
@@ -22,28 +23,32 @@
 
 <style>
 /* ==========================================================================
-   COLOURS (sampled from logo.png — edit these 3 lines to re-theme)
+   PALETTE - dark, strictly monochrome, matching the logo
+   The logo is white line art on SOLID BLACK, so the page is true black too
+   and the logo's own black square melts into it - only the artwork shows.
+   Premium feel comes from type, spacing and hairlines, not from colour.
+   The veg / non-veg dots are the one exception.
+   To re-theme, change these variables and nothing else.
    ========================================================================== */
 :root{
-  color-scheme: light;                 /* light theme only, never auto-switches */
-  --bg:        #FFFFFF;   /* background  */
-  --primary:   #141414;   /* logo black  */
-  --text:      #141414;   /* body text   */
-
-  --surface:   #F7F6F3;   /* subtle card / footer tint */
-  --muted:     #5F5B54;   /* descriptions */
-  --line:      #E4E1DA;   /* dividers    */
-  --leader:    #CFCAC0;   /* dotted price leader */
-  --veg:       #177245;   /* veg dot     */
-  --nonveg:    #B02418;   /* non-veg dot */
+  color-scheme: dark;                   /* dark by design, never auto-switches */
+  --bg:        #000000;   /* page                    */
+  --bg-wash:   #141414;   /* faint light at the top  */
+  --surface:   #0F0F0F;   /* card / footer panel     */
+  --ink:       #F5F5F4;   /* headings, prices        */
+  --ink-2:     #9A9A98;   /* secondary text, numerals*/
+  --line:      #262626;   /* hairline dividers       */
+  --leader:    #3D3D3D;   /* dotted price leader     */
+  --veg:       #34C77B;
+  --nonveg:    #F2554A;
 
   --serif: "Playfair Display", "Iowan Old Style", "Palatino Linotype", Palatino,
            Georgia, "Times New Roman", serif;
   --sans:  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
            Arial, "Noto Sans", sans-serif;
 
-  --bar-h: 52px;                       /* sticky category bar height */
-  --pad: 20px;
+  --bar-h: 50px;
+  --pad: 22px;
 }
 
 *,*::before,*::after{ box-sizing:border-box; }
@@ -51,6 +56,7 @@
 html{
   -webkit-text-size-adjust:100%;
   scroll-behavior:smooth;
+  scroll-padding-top:calc(var(--bar-h) + 12px);   /* native anchor jumps, no JS */
 }
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior:auto; }
@@ -59,14 +65,22 @@ html{
 
 body{
   margin:0;
-  background:var(--bg);
-  color:var(--text);
+  /* the faintest wash of light from the top - depth without a texture image */
+  background:
+    radial-gradient(120% 46% at 50% 0%, var(--bg-wash) 0%, rgba(20,20,20,0) 60%),
+    var(--bg);
+  background-attachment:fixed;
+  color:var(--ink);
   font-family:var(--sans);
   font-size:1rem;            /* 16px minimum body text */
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  font-kerning:normal;
   overflow-wrap:break-word;
+  -webkit-tap-highlight-color:transparent;
 }
+::selection{ background:rgba(255,255,255,.22); color:var(--ink); }
 
 .wrap{
   width:100%;
@@ -81,63 +95,99 @@ body{
 }
 .skip{
   position:absolute; left:-9999px; top:0; z-index:50;
-  background:var(--primary); color:#fff; padding:.75rem 1rem; border-radius:0 0 8px 0;
+  background:var(--ink); color:#fff; padding:.75rem 1rem; border-radius:0 0 8px 0;
 }
 .skip:focus{ left:0; }
 
 /* ==========================================================================
-   HEADER
+   MASTHEAD
    ========================================================================== */
 .hero{
   text-align:center;
-  padding:2.25rem 0 1.5rem;
+  padding:2.75rem 0 1.75rem;
 }
+/* the logo is solid black, same as the page, so it needs no background of its
+   own - the white artwork floats straight onto the page. Only a hairline ring
+   to suggest the edge of the mark. */
 .logo{
   display:block;
   height:auto;
   max-height:80px;           /* logo never taller than 80px */
   max-width:80px;
   width:auto;
-  margin:0 auto 1.1rem;
-  border-radius:14px;        /* the logo is a solid black square -> reads as a badge */
-  background:var(--primary);
+  margin:0 auto 1.4rem;
+  border-radius:16px;
+  background:#000;           /* pinned to the logo's own black, NOT var(--ink) */
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.18),
+    0 0 0 6px rgba(255,255,255,.045),
+    0 18px 40px -18px rgba(0,0,0,.9);
 }
+
 h1{
   font-family:var(--serif);
   font-weight:600;
-  font-size:clamp(1.9rem,7vw,2.6rem);
-  line-height:1.15;
-  letter-spacing:.01em;
+  font-size:clamp(2.15rem,8.6vw,3rem);
+  line-height:1.08;
+  letter-spacing:-.015em;
   margin:0;
+  text-wrap:balance;
 }
+/* small-caps eyebrow under the name */
 .tagline{
-  margin:.5rem 0 0;
-  color:var(--muted);
-  font-size:.9375rem;
-  letter-spacing:.06em;
+  margin:.85rem 0 0;
+  color:var(--ink-2);
+  font-size:.6875rem;
+  font-weight:600;
+  letter-spacing:.26em;
   text-transform:uppercase;
 }
 
 /* veg / non-veg key */
 .legend{
-  display:flex; justify-content:center; gap:1.5rem;
-  list-style:none; margin:1.25rem 0 0; padding:0;
-  font-size:.8125rem; color:var(--muted);
+  display:flex; justify-content:center; flex-wrap:wrap; gap:.4rem 1.5rem;
+  list-style:none; margin:1.6rem 0 0; padding:0;
+  font-size:.75rem; color:var(--ink-2);
 }
 .legend li{ display:flex; align-items:center; gap:.5rem; }
+
+/* centred hairline with a small ink diamond - no icon font needed */
+.ornament{
+  display:flex; align-items:center; gap:.9rem;
+}
+.ornament::before,
+.ornament::after{ content:""; flex:1 1 auto; border-top:1px solid var(--line); }
+.ornament span{
+  width:5px; height:5px;
+  background:var(--ink-2);
+  transform:rotate(45deg);
+}
 
 /* ==========================================================================
    STICKY CATEGORY BAR
    ========================================================================== */
 .catbar{
   position:sticky; top:0; z-index:20;
-  background:var(--bg);
+  background:rgba(0,0,0,.88);
   border-top:1px solid var(--line);
   border-bottom:1px solid var(--line);
+  transition:box-shadow .3s ease;
 }
+@supports ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+  .catbar{
+    background:rgba(0,0,0,.66);
+    -webkit-backdrop-filter:saturate(180%) blur(14px);
+    backdrop-filter:saturate(180%) blur(14px);
+  }
+}
+/* shadow only once the page has scrolled - set by JS */
+.catbar.is-stuck{
+  box-shadow:0 1px 0 rgba(255,255,255,.04), 0 12px 26px -18px rgba(0,0,0,.95);
+}
+
 .catbar__scroll{
   display:flex;
-  gap:.25rem;
+  gap:.15rem;
   max-width:600px;
   margin-inline:auto;
   padding:0 var(--pad);
@@ -153,43 +203,68 @@ h1{
   flex:0 0 auto;
   display:inline-flex; align-items:center;
   min-height:var(--bar-h);
-  padding:0 .7rem;
-  color:var(--muted);
+  padding:0 .65rem;
+  color:var(--ink-2);
   text-decoration:none;
-  font-size:.8125rem;
-  letter-spacing:.09em;
+  font-size:.75rem;
+  font-weight:500;
+  letter-spacing:.12em;
   text-transform:uppercase;
   white-space:nowrap;
   border-bottom:2px solid transparent;
-  transition:color .18s ease, border-color .18s ease;
+  transition:color .2s ease, border-color .2s ease;
 }
-.cat[aria-current="true"]{ color:var(--primary); border-bottom-color:var(--primary); font-weight:600; }
+.cat:hover{ color:var(--ink); }
+.cat[aria-current="true"]{
+  color:var(--ink);
+  border-bottom-color:var(--ink);
+  font-weight:600;
+}
 
 /* ==========================================================================
    MENU SECTIONS
    ========================================================================== */
-main{ padding-bottom:2.5rem; }
-section{ scroll-margin-top:calc(var(--bar-h) + 10px); padding-top:2.25rem; }
-section:first-child{ padding-top:2rem; }
+main{ padding-bottom:3rem; counter-reset:sect; }   /* counter drives the 01/02 numerals */
+section{ scroll-margin-top:calc(var(--bar-h) + 12px); padding-top:2.75rem; }
+section:first-child{ padding-top:2.25rem; }
 
+/* "01 — STARTERS —————————" : numerals from CSS, no markup to edit */
 .cat-title{
-  display:flex; align-items:center; gap:.85rem;
-  margin:0 0 1.1rem;
+  counter-increment:sect;
+  display:flex; align-items:center; gap:.7rem;
+  margin:0 0 .35rem;
   font-family:var(--sans);
-  font-size:.8125rem;
+  font-size:.75rem;
   font-weight:700;
-  letter-spacing:.16em;
+  letter-spacing:.22em;
   text-transform:uppercase;
-  color:var(--primary);
+  color:var(--ink);
+}
+.cat-title::before{
+  content:counter(sect, decimal-leading-zero);
+  font-family:var(--serif);
+  font-size:.8125rem;
+  font-weight:600;
+  letter-spacing:.06em;
+  color:var(--ink-2);
 }
 .cat-title::after{           /* thin divider line */
   content:"";
   flex:1 1 auto;
   border-top:1px solid var(--line);
 }
+/* short hairline under the title, tying the block together */
+.cat-note{
+  margin:0 0 1.15rem;
+  font-size:.75rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--ink-2);
+  opacity:.75;
+}
 
 .items{ list-style:none; margin:0; padding:0; }
-.item{ padding:.7rem 0; }
+.item{ padding:.8rem 0; }
 .item + .item{ border-top:1px solid var(--line); }
 
 /* ---- ONE ITEM = the block below. Edit the name / price / dot / description.
@@ -211,7 +286,7 @@ section:first-child{ padding-top:2rem; }
   display:grid;
   grid-template-columns:minmax(0,1fr) auto;
   align-items:baseline;
-  column-gap:.75rem;
+  column-gap:.8rem;
   margin:0;
 }
 .item__mid{
@@ -225,23 +300,33 @@ section:first-child{ padding-top:2rem; }
   font-size:1.0625rem;
   font-weight:600;
   line-height:1.4;
+  letter-spacing:-.003em;
 }
 .item__leader{
   flex:1 1 0;
   min-width:.9rem;
+  margin-left:.4rem;
   border-bottom:1px dotted var(--leader);
 }
 .item__price{
   white-space:nowrap;
+  font-family:var(--serif);
   font-size:1.0625rem;
   font-weight:600;
-  font-variant-numeric:tabular-nums;
+  font-variant-numeric:lining-nums tabular-nums;
+  color:var(--ink);
 }
 .item__desc{
-  margin:.2rem 0 0;
-  color:var(--muted);
+  margin:.22rem 0 0;
+  color:var(--ink-2);
   font-size:.9375rem;
   line-height:1.55;
+}
+
+/* press / hover state, desktop pointers only so it never sticks on touch */
+@media (hover:hover){
+  .item{ transition:background-color .18s ease; border-radius:4px; }
+  .item:hover{ background:rgba(255,255,255,.045); }
 }
 
 /* small green / red veg marker */
@@ -270,39 +355,59 @@ footer{
   background:var(--surface);
   border-top:1px solid var(--line);
   text-align:center;
-  padding:2.25rem 0 calc(2.25rem + env(safe-area-inset-bottom));
+  padding:2.5rem 0 calc(2.5rem + env(safe-area-inset-bottom));
 }
+footer .ornament{ margin-bottom:1.75rem; }
 footer .tel{
   display:inline-block;
   font-family:var(--serif);
-  font-size:1.375rem;
+  font-size:1.5rem;
   font-weight:600;
-  color:var(--primary);
+  color:var(--ink);
   text-decoration:none;
   letter-spacing:.01em;
-  padding:.35rem .25rem;      /* comfortable tap target */
+  padding:.4rem .3rem;       /* comfortable tap target */
+  border-bottom:1px solid var(--ink);
 }
 footer address{
-  margin:.5rem 0 0;
+  margin:.9rem 0 0;
   font-style:normal;
-  color:var(--muted);
+  color:var(--ink-2);
   font-size:.9375rem;
+  line-height:1.7;
 }
 footer .gst{
-  margin:1.25rem 0 0;
-  color:var(--muted);
-  font-size:.8125rem;
-  letter-spacing:.04em;
+  margin:1.5rem auto 0;
+  max-width:34ch;
+  color:var(--ink-2);
+  font-size:.75rem;
+  letter-spacing:.06em;
+  opacity:.8;
 }
 
 /* ==========================================================================
-   PRINT
+   PRINT  - it should look like a printed menu on paper
    ========================================================================== */
 @media print{
-  .catbar,.skip{ display:none; }
-  body{ font-size:11pt; }
-  section{ padding-top:1.25rem; break-inside:avoid; }
-  .item{ break-inside:avoid; }
+  /* paper is white, so flip the palette back to light for the print only -
+     overrides the dark variables, no other rule needs changing */
+  :root{
+    --pad:0;
+    --bg:#fff; --bg-wash:#fff; --surface:#fff;
+    --ink:#000; --ink-2:#444; --line:#ccc; --leader:#999;
+    --veg:#1F7A4D; --nonveg:#B3271E;
+    color-scheme:light;
+  }
+  .catbar,.skip,.ornament,.legend{ display:none; }
+  body{ background:#fff; font-size:10.5pt; }
+  .hero{ padding:0 0 1.5rem; }
+  .logo{ max-height:56px; box-shadow:none; }
+  section{ padding-top:1.4rem; break-inside:avoid-page; }
+  .item{ break-inside:avoid; padding:.4rem 0; }
+  .item:hover{ background:none; }
+  .cat-title{ break-after:avoid; }
+  footer{ background:#fff; padding-top:1.5rem; }
+  a{ text-decoration:none; color:inherit; }
 }
 </style>
 </head>
@@ -310,7 +415,7 @@ footer .gst{
 <body>
 <a class="skip" href="#menu">Skip to menu</a>
 
-<!-- ========================= HEADER ========================= -->
+<!-- ========================= MASTHEAD ========================= -->
 <header class="hero wrap">
   <img class="logo" src="Godown.jpeg" alt="Godown Bar logo"
        width="160" height="160" decoding="async" fetchpriority="high">
@@ -324,6 +429,8 @@ footer .gst{
     <li><i class="dot dot--nonveg" aria-hidden="true"></i> Non-vegetarian</li>
   </ul>
 </header>
+
+<div class="ornament wrap" aria-hidden="true"><span></span></div>
 
 <!-- ================= STICKY CATEGORY BAR (shows when 4+ categories) ================= -->
 <nav class="catbar" aria-label="Menu categories">
@@ -343,6 +450,7 @@ footer .gst{
   <!-- ========================= STARTERS ========================= -->
   <section id="starters" aria-labelledby="h-starters">
     <h2 class="cat-title" id="h-starters">Starters</h2>
+    <p class="cat-note">To begin</p>
     <ul class="items">
 
       <li class="item">
@@ -423,6 +531,7 @@ footer .gst{
   <!-- ===================== MAIN COURSE — VEG ===================== -->
   <section id="main-veg" aria-labelledby="h-mainveg">
     <h2 class="cat-title" id="h-mainveg">Main Course &mdash; Veg</h2>
+    <p class="cat-note">From the kitchen</p>
     <ul class="items">
 
       <li class="item">
@@ -503,6 +612,7 @@ footer .gst{
   <!-- ================== MAIN COURSE — NON-VEG ================== -->
   <section id="main-nonveg" aria-labelledby="h-mainnonveg">
     <h2 class="cat-title" id="h-mainnonveg">Main Course &mdash; Non-Veg</h2>
+    <p class="cat-note">From the grill</p>
     <ul class="items">
 
       <li class="item">
@@ -583,6 +693,7 @@ footer .gst{
   <!-- ===================== BIRYANI & RICE ===================== -->
   <section id="biryani" aria-labelledby="h-biryani">
     <h2 class="cat-title" id="h-biryani">Biryani &amp; Rice</h2>
+    <p class="cat-note">Sealed &amp; served hot</p>
     <ul class="items">
 
       <li class="item">
@@ -651,6 +762,7 @@ footer .gst{
   <!-- ========================= BREADS ========================= -->
   <section id="breads" aria-labelledby="h-breads">
     <h2 class="cat-title" id="h-breads">Breads</h2>
+    <p class="cat-note">Baked in the tandoor</p>
     <ul class="items">
 
       <li class="item">
@@ -703,6 +815,7 @@ footer .gst{
   <!-- ========================= DESSERTS ========================= -->
   <section id="desserts" aria-labelledby="h-desserts">
     <h2 class="cat-title" id="h-desserts">Desserts</h2>
+    <p class="cat-note">To finish</p>
     <ul class="items">
 
       <li class="item">
@@ -759,6 +872,7 @@ footer .gst{
   <!-- ========================= BEVERAGES ========================= -->
   <section id="beverages" aria-labelledby="h-beverages">
     <h2 class="cat-title" id="h-beverages">Beverages</h2>
+    <p class="cat-note">Served throughout</p>
     <ul class="items">
 
       <li class="item">
@@ -826,6 +940,8 @@ footer .gst{
 <!-- ========================= FOOTER ========================= -->
 <footer>
   <div class="wrap">
+    <div class="ornament" aria-hidden="true"><span></span></div>
+
     <!-- EDIT: replace the number below with the restaurant phone (and the tel= value) -->
     <a class="tel" href="tel:+919876543210">+91 98765 43210</a>
 
@@ -865,10 +981,11 @@ footer .gst{
     });
   });
 
-  /* --- highlight whichever section is currently at the top --- */
   var queued = false;
   function update() {
     queued = false;
+    bar.classList.toggle('is-stuck', window.pageYOffset > 8);
+
     var probe = window.pageYOffset + bar.offsetHeight + 24;
     var index = 0;
     for (var i = 0; i < sections.length; i++) {
